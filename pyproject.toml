@@ -1,0 +1,18 @@
+[build-system]
+requires = ['setuptools==82.0.1']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'self_service_platform'
+version = '0.0.1'
+description = "A self-service platform for automated infrastructure provisioning"
+requires-python = ">=3.12"
+
+[project.scripts]
+self_service_platform = 'self_service_platform.main:main'
+
+[tool.setuptools.packages.find]
+where = ['src']
+
+
+
