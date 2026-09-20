@@ -16,3 +16,11 @@ def test_create_database():
     assert data["engine"] == "postgres"
     assert data["version"] == "16"
     assert data["environment"] == "dev" 
+
+def test_get_database():
+    response = client.get("/api/v1/databases")
+
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "application/json"
+    data = response.json()
+    assert isinstance(data, list)
