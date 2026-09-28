@@ -7,3 +7,6 @@
 --- The scripts section connects a CLI command to a python function
 - Basic fast API
 -- how to create endpoint for GET requests and provide responses via python function
+
+09-28-2026
+- learned need to separate request and response
