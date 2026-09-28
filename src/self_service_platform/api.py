@@ -15,14 +15,10 @@ class databaseRequest(BaseModel):
     engine: str = "postgres"
     version: str = "16"
     environment: str = "dev"
-    status: int = "good"
-    created_at: str = "test"
-    updated_at: str = "test"
 
 # Pydantic model for Database Response
 class databaseResponse(BaseModel):
-    id: int
-    name: str
+    id: str
     engine: str
     environment: str
 
