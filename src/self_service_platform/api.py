@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 import uuid
+from datetime import datetime, timezone
 
 
 # Create a FastAPI app instance
@@ -21,6 +22,8 @@ class databaseResponse(BaseModel):
     engine: str
     version: str
     environment: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 # Endpoint to create new database
 @app.post("/api/v1/databases", response_model=databaseResponse, status_code=201)
