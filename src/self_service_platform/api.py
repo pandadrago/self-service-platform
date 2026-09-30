@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import uuid
 
 
@@ -11,21 +11,16 @@ build_db = []
 
 # Pydantic model for Database Requests
 class databaseRequest(BaseModel):
-    id: str = uuid.uuid4()
     engine: str = "postgres"
     version: str = "16"
     environment: str = "dev"
 
 # Pydantic model for Database Response
 class databaseResponse(BaseModel):
-    id: str
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     engine: str
+    version: str
     environment: str
-
-# Endpoint to do a Health Check
-@app.get("/health")
-def health():
-    return {"status": "healthy"}
 
 # Endpoint to create new database
 @app.post("/api/v1/databases", response_model=databaseResponse, status_code=201)
@@ -34,15 +29,18 @@ def create_database(request: databaseRequest):
     return request
 
 # Endpoint to provide database information
-@app.get("/api/v1/databases", response_model=list[databaseRequest])
+@app.get("/api/v1/databases", response_model=list[databaseResponse])
 def read_db_list():
     return build_db # return list of all databases
 
-@app.get("/api/v1/databases/{database_id}", response_model=databaseResponse, status_code=201)
+# Endpoint to provide database information from a specific ID
+@app.get("/api/v1/databases/{database_id}", response_model=databaseResponse)
 def get_db_from_id(database_id: str):
     for db in build_db:
         if db.id == database_id:
             return db
+
+    raise HTTPException(status_code=404, detail="Database not found")
 
 
 
