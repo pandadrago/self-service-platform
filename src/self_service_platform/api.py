@@ -38,4 +38,11 @@ def create_database(request: databaseRequest):
 def read_db_list():
     return build_db # return list of all databases
 
+@app.get("/api/v1/databases/{database_id}", response_model=databaseResponse, status_code=201)
+def get_db_from_id(database_id: str):
+    for db in build_db:
+        if db.id == database_id:
+            return db
+
+
 
