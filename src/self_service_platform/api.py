@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 import uuid
 from datetime import datetime, timezone
+from typing import Literal
 
 
 # Create a FastAPI app instance
@@ -12,7 +13,7 @@ build_db = []
 
 # Pydantic model for Database Requests
 class databaseRequest(BaseModel):
-    engine: str = "postgres"
+    engine: Literal["postgres", "mysql"] = "postgres"
     version: str = "16"
     environment: str = "dev"
 

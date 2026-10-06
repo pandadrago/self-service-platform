@@ -62,8 +62,8 @@ def test_retrieve_non_db():
 def test_bad_db_request():
     new_database = {
         "id": "testing",
-        "engine": "postgres",
-        "version": "16",
+        "engine": "not",
+        "version": "not-a-number",
         "environment": "dev"
         }
     response = client.post("/api/v1/databases", json=new_database)
