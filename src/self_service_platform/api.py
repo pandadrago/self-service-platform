@@ -28,8 +28,13 @@ class databaseResponse(BaseModel):
 # Endpoint to create new database
 @app.post("/api/v1/databases", response_model=databaseResponse, status_code=201)
 def create_database(request: databaseRequest):
-    build_db.append(request) # add new database to main list
-    return request
+    my_db = databaseResponse(
+        engine=request.engine,
+        version=request.version,
+        environment=request.environment
+    )
+    build_db.append(my_db) # add new database to main list
+    return my_db
 
 # Endpoint to provide database information
 @app.get("/api/v1/databases", response_model=list[databaseResponse])
