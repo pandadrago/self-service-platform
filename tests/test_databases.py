@@ -3,6 +3,7 @@ from self_service_platform.api import app
 
 client = TestClient(app)
 
+# Test creating a new DB
 def test_create_database():
     new_database = {}
     response = client.post("/api/v1/databases", json=new_database)
@@ -26,9 +27,10 @@ def test_get_database():
     data = response.json()
     assert isinstance(data, list)
 
+# Test database creation and test get endpoint with UID
 def test_get_database_from_id():
-    new_database1 = {}
-    response1 = client.post("/api/v1/databases", json=new_database1)
+    new_database = {}
+    response1 = client.post("/api/v1/databases", json=new_database)
 
     assert response1.status_code == 201
     assert response1.headers["content-type"] == "application/json"
@@ -40,9 +42,6 @@ def test_get_database_from_id():
     assert data1["version"] == "16"
     assert data1["environment"] == "dev"
 
-    print("\n--- DEBUG DATA1 TYPE ---", type(data1))
-    print("--- DEBUG DATA1 CONTENT ---", data1)
-
     response2 = client.get(f"/api/v1/databases/{data1['id']}")
     
     assert response2.status_code == 200
@@ -53,3 +52,21 @@ def test_get_database_from_id():
     assert data2["engine"] == data1["engine"]
     assert data2["version"] == data1["version"]
     assert data2["environment"] == data1["environment"]
+
+# Test random UID database retrieval 
+def test_retrieve_non_db():
+    response = client.get("/api/v1/databases/{f535f137-93c7-4c23-b517-4f2872041196}")
+    assert response.status_code == 404
+    assert response.headers["content-type"] == "application/json"
+
+def test_bad_db_request():
+    new_database = {
+        "id": "testing",
+        "engine": "postgres",
+        "version": "16",
+        "environment": "dev"
+        }
+    response = client.post("/api/v1/databases", json=new_database)
+
+    assert response.status_code == 422
+    assert response.headers["content-type"] == "application/json"
